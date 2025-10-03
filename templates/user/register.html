@@ -1,0 +1,303 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Style Register Page</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/body.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="register">
+            <div class="register1">
+                <div class="logo-section">
+                    <img id="dark-logo" src="{% static 'img/a(2).png' %}" alt="logo" class="main-logo">
+                    <!-- <img id="light-logo" src="{% static 'img/a.png' %}" alt="logo" class="main-logo"> -->
+                </div>
+                <div class="hero-text">
+                    <h1>Hoziroq qo'shiling</h1>
+                    <p>Yangi imkoniyatlarni kashf qiling</p>
+                </div>
+            </div>
+            <div class="register2">
+                <h1>Platformaga xush kelibsiz</h1>
+                <p class="subtitle">Hisobingizni yarating va boshqa foydalanuvchilar bilan bog'laning</p>
+                <button class="reg-button" onclick="showModal()">
+                    <span>Hisob yaratish</span>
+                </button>
+                <div class="divider">
+                    <span>yoki</span>
+                </div>
+                <button class="reg-button1" onclick="showLoginModal(); return false;">
+                    <span>Tizimga kirish</span>
+                </button>
+                <p class="terms">
+                    Ro'yxatdan o'tish orqali siz bizning
+                    <a href="#">Foydalanish shartlari</a> va
+                    <a href="#">Maxfiylik siyosati</a>mizga rozilik bildirasiz.
+                </p>
+            </div>
+        </div>
+
+        <!-- Register modal (X.com style) -->
+        <div class="modal" id="modal" style="display: none;">
+            <div class="modal-content x-modal">
+                <div class="modal-header">
+                    <button class="close-button" onclick="closeModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M18.3 5.71a.996.996 0 0 0-1.41 0L12 10.59 7.11 5.7A.996.996 0 1 0 5.7 7.11L10.59 12 5.7 16.89a.996.996 0 1 0 1.41 1.41L12 13.41l4.89 4.89a.996.996 0 0 0 1.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z" />
+                        </svg>
+                    </button>
+                    <div class="modal-logo">
+                        <img src="{% static 'img/a(2).png' %}" alt="logo">
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'register' %}" id="register-form">
+                        {% csrf_token %}
+                        <h1>Hisobingizni yarating</h1>
+
+                        <div class="input-group">
+                            <input required type="text" name="first_name" maxlength="50" autocomplete="off"
+                                class="input" placeholder=" ">
+                            <label class="user-label">Ism</label>
+                        </div>
+
+                        <div class="input-group">
+                            <input required type="email" name="email" autocomplete="off" class="input" placeholder=" ">
+                            <label class="user-label">Email manzil</label>
+                        </div>
+
+                        <div class="birthday-section">
+                            <h2>Tug'ilgan sanangiz</h2>
+                            <p class="birthday-text">Bu ma'lumot oshkor etilmaydi. Biznes, mushuk yoki mashxur shaxs
+                                hisobilari bo'lsa ham, yoshingizni tasdiqlang.</p>
+
+                            <div class="birthday_input_all">
+                                <select class="date-select month" name="month" required>
+                                    <option value="" disabled selected>Oy</option>
+                                    <option value="1">Yanvar</option>
+                                    <option value="2">Fevral</option>
+                                    <option value="3">Mart</option>
+                                    <option value="4">Aprel</option>
+                                    <option value="5">May</option>
+                                    <option value="6">Iyun</option>
+                                    <option value="7">Iyul</option>
+                                    <option value="8">Avgust</option>
+                                    <option value="9">Sentabr</option>
+                                    <option value="10">Oktyabr</option>
+                                    <option value="11">Noyabr</option>
+                                    <option value="12">Dekabr</option>
+                                </select>
+
+                                <select class="date-select day" name="day" required>
+                                    <option value="" disabled selected>Kun</option>
+                                    <script>
+                                        for (let i = 1; i <= 31; i++) {
+                                            document.write(`<option value="${i}">${i}</option>`);
+                                        }
+                                    </script>
+                                </select>
+
+                                <select class="date-select year" name="year" required>
+                                    <option value="" disabled selected>Yil</option>
+                                    <script>
+                                        for (let i = 2025; i >= 1900; i--) {
+                                            document.write(`<option value="${i}">${i}</option>`);
+                                        }
+                                    </script>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="next-button" onclick="return validateFormAndShowCode(event);">
+                            <span>Keyingi</span>
+                        </button>
+
+                        <div class="error-message" id="error-message">
+                            {% if messages %}
+                            {% for message in messages %}
+                            message
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code verification modal -->
+        <div class="modal" id="modal-email-code" style="display: none;">
+            <div class="modal-content x-modal">
+                <div class="modal-header">
+                    <a href="{% url 'register' %}">
+                        <button class="close-button" onclick="closeEmailModal()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M18.3 5.71a.996.996 0 0 0-1.41 0L12 10.59 7.11 5.7A.996.996 0 1 0 5.7 7.11L10.59 12 5.7 16.89a.996.996 0 1 0 1.41 1.41L12 13.41l4.89 4.89a.996.996 0 0 0 1.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z" />
+                            </svg>
+                        </button>
+                    </a>
+                    <div class="modal-logo">
+                        <img src="{% static 'img/a(2).png' %}" alt="logo">
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <h1>Kodimizni oldingiz</h1>
+                    <p class="verification-text"> email manziliga yuborilgan kodni kiriting</p>
+                    <form method="POST" action="{% url 'verify' %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input required type="text" name="code" class="input" autocomplete="off" placeholder=" ">
+                            <label class="user-label">Tasdiqlash kodi</label>
+                        </div>
+                        <button type="submit" class="next-button">
+                            <span>Tasdiqlash</span>
+                        </button>
+                    </form>
+                    <div class="error-message2" id="error-message2">
+                        {% if messages %}
+                        {% for message in messages %}
+                        message
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Username/Password modal -->
+        <div class="modal" id="modal-username"
+            style="display:{% if show_username_modal %}flex{% else %}none{% endif %};">
+            <div class="modal-content x-modal">
+                <div class="modal-header">
+                    <div class="modal-logo">
+                        <img src="{% static 'img/a(2).png' %}" alt="logo">
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'saveuser' %}" id="username-login-form">
+                        {% csrf_token %}
+                        <h1>Hisobni yakunlang</h1>
+                        <div class="input-group">
+                            <input required type="text" name="username" class="input" minlength="6" maxlength="20"
+                                autocomplete="off" placeholder=" ">
+                            <label class="user-label">Foydalanuvchi nomi</label>
+                        </div>
+                        <div class="input-group password-group">
+                            <input required type="password" name="password" id="register-password" minlength="8"
+                                maxlength="16" class="input" autocomplete="off" placeholder=" ">
+                            <label class="user-label">Parol</label>
+                            <button type="button" class="toggle-eye"
+                                onclick="togglePassword('register-password', this)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                                </svg>
+                            </button>
+                        </div>
+                        <button type="submit" class="next-button">
+                            <span>Ro'yxatdan o'tish</span>
+                        </button>
+                    </form>
+                    <div class="error-message4" id="error-message4">
+                        {% if username_error %}
+                        username_error
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login modal -->
+        <div class="modal" id="modal-login" style="display: none;">
+            <div class="modal-content x-modal">
+                <div class="modal-header">
+                    <a href="{% url 'register' %}">
+                        <button class="close-button">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M18.3 5.71a.996.996 0 0 0-1.41 0L12 10.59 7.11 5.7A.996.996 0 1 0 5.7 7.11L10.59 12 5.7 16.89a.996.996 0 1 0 1.41 1.41L12 13.41l4.89 4.89a.996.996 0 0 0 1.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z" />
+                            </svg>
+                        </button>
+                    </a>
+                    <div class="modal-logo">
+                        <img src="{% static 'img/a(2).png' %}" alt="logo">
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'user_login' %}">
+                        {% csrf_token %}
+                        <h1>Hisobingizga kiring</h1>
+                        <div class="input-group">
+                            <input required type="text" name="username_login" class="input" autocomplete="off"
+                                placeholder=" ">
+                            <label class="user-label">Foydalanuvchi nomi</label>
+                        </div>
+                        <div class="input-group password-group">
+                            <input required type="password" name="password_login" id="login-password" class="input"
+                                autocomplete="off" placeholder=" ">
+                            <label class="user-label">Parol</label>
+                            <button type="button" class="toggle-eye" onclick="togglePassword('login-password', this)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="error-message3" id="error-message">
+                            {% if messages %}
+                            {% for message in messages %}
+                            {{ message }}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="next-button">
+                            <span>Keyingi</span>
+                        </button>
+                        <div class="forgot-password">
+                            <a href="#">Parolni unutdingizmi?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/register.js' %}"></script>
+    <script>
+        window.onload = function () {
+            {% if show_email_modal %}
+            document.getElementById('modal-email-code').style.display = 'flex';
+            {% endif %}
+            {% if form_modal_show %}
+            document.getElementById('modal').style.display = 'flex';
+            {% endif %}
+            {% if show_username_modal %}
+            document.getElementById('modal-username').style.display = 'flex';
+            {% endif %}
+            {% if show_login_modal %}
+            document.getElementById('modal-login').style.display = 'flex';
+            {% endif %}
+        }
+
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+
+            // Update icon (you can customize this part)
+            button.innerHTML = isPassword
+                ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>'
+                : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
+        }
+    </script>
+</body>
+
+</html>
