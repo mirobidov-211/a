@@ -1,1 +1,1 @@
-web: gunicorn 'A-MASTER.wsgi'
+web: gunicorn Twitter.wsgi
