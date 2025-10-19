@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <link rel="stylesheet" href="{% static 'css/body.css' %}">
+
     <title>Home / X</title>
 
 </head>
@@ -52,14 +53,16 @@
                         </svg>
                         <span>Xabarlar</span>
                     </div>
-                    <div class="dropdown-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"
-                            style="width: 20px; height: 20px;">
-                            <path
-                                d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
-                        </svg>
-                        <span>Profil</span>
-                    </div>
+                    <a href="{% url 'profile' %}" class="mobile-profile-a">
+                        <div class="dropdown-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                class="size-5" style="width: 20px; height: 20px;">
+                                <path
+                                    d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
+                            </svg>
+                            <span>Profil</span>
+                        </div>
+                    </a>
                     <div class="dropdown-item">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"
                             style="width: 20px; height: 20px;">
@@ -70,17 +73,19 @@
                         <span>Sozlamalar</span>
                     </div>
                     <div class="dropdown-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"
-                            style="width: 20px; height: 20px;">
-                            <path fillRule="evenodd"
-                                d="M17 4.25A2.25 2.25 0 0 0 14.75 2h-5.5A2.25 2.25 0 0 0 7 4.25v2a.75.75 0 0 0 1.5 0v-2a.75.75 0 0 1 .75-.75h5.5a.75.75 0 0 1 .75.75v11.5a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1-.75-.75v-2a.75.75 0 0 0-1.5 0v2A2.25 2.25 0 0 0 9.25 18h5.5A2.25 2.25 0 0 0 17 15.75V4.25Z"
-                                clipRule="evenodd" />
-                            <path fillRule="evenodd"
-                                d="M14 10a.75.75 0 0 0-.75-.75H3.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 14 10Z"
-                                clipRule="evenodd" />
-                        </svg>
-
-                        <span>Chiqish</span>
+                        <a href="{% url 'logaut' %}" class="dropdown-item-a"
+                            style="color: white; text-decoration: none;">
+                            <svg xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                class="size-5" style="width: 20px; height: 20px;">
+                                <path fillRule="evenodd"
+                                    d="M17 4.25A2.25 2.25 0 0 0 14.75 2h-5.5A2.25 2.25 0 0 0 7 4.25v2a.75.75 0 0 0 1.5 0v-2a.75.75 0 0 1 .75-.75h5.5a.75.75 0 0 1 .75.75v11.5a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1-.75-.75v-2a.75.75 0 0 0-1.5 0v2A2.25 2.25 0 0 0 9.25 18h5.5A2.25 2.25 0 0 0 17 15.75V4.25Z"
+                                    clipRule="evenodd" />
+                                <path fillRule="evenodd"
+                                    d="M14 10a.75.75 0 0 0-.75-.75H3.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 14 10Z"
+                                    clipRule="evenodd" />
+                            </svg>
+                            <span>Chiqish</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -115,7 +120,7 @@
                             <span class="nav-text">Bosh sahifa</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="#" class="nav-link">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="size-5" style="width: 30px; height: 30px;">
@@ -163,20 +168,18 @@
 
                             <span class="nav-text">Saqlanganlar</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{% url 'profile' %}" class="nav-link">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="size-5" style="width: 30px; height: 30px;">
                                 <path
                                     d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
                             </svg>
-
-
                             <span class="nav-text">Profil</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="#" class="nav-link">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="size-5" style="width: 30px; height: 30px;">
@@ -186,7 +189,7 @@
                             </svg>
                             <span class="nav-text">Sozlamalar</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a href="{% url 'logaut' %}" class="nav-link">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -209,21 +212,21 @@
             <button class="post-btn1">+</button>
         </aside>
 
-        {% block main%}
+        {% block main %}
 
 
         {% endblock %}
 
 
-        
+
 
         <!-- Right Sidebar -->
         <aside class="right-sidebar">
-            <input type="text" class="search-box" placeholder="Qidirish">
+            <!-- <input type="text" class="search-box" placeholder="Qidirish">
 
             <div class="widget">
                 <div class="widget-header">Kimni kuzatish kerak</div>
-                <!-- <div class="follow-suggestion">
+                <div class="follow-suggestion">
                     <div class="follow-info">
                         <div class="follow-avatar">N</div>
                         <div class="follow-details">
@@ -252,8 +255,8 @@
                         </div>
                     </div>
                     <button class="follow-btn">Follow</button>
-                </div> -->
-            </div>
+                </div>
+            </div> -->
         </aside>
     </div>
 

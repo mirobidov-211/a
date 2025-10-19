@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+<!-- Use the same stylesheet as home so profile page styles match the main site -->
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+
+<div class="profile-container">
+    <!-- Header -->
+    <div class="profile-header">
+        <a href="{% url 'home' %}">
+            <button>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+        </a>
+        <button>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                </path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="profile-section">
+        <div class="profile-image">
+            <img src="{% static 'img/profile.png' %}" alt="">
+        </div>
+        <h2 class="profile-name">{{ request.user.first_name }}</h2>
+        <p class="profile-username">@{{ request.user.username }}</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <div class="profile-tabs">
+            <button class="profile-tab active" onclick="switchTab('posts')" id="posts-tab">
+                <div class="tab-content">
+                    <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Posts</span>
+                </div>
+            </button>
+
+            <button class="profile-tab" onclick="switchTab('saved')" id="saved-tab">
+                <div class="tab-content">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                    </svg>
+                    <span>Saved</span>
+                </div>
+            </button>
+
+            <button class="profile-tab" onclick="switchTab('likes')" id="likes-tab">
+                <div class="tab-content">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                        </path>
+                    </svg>
+                    <span>Likes</span>
+                </div>
+            </button>
+        </div>
+        <div class="tab-indicator" id="tab-indicator"></div>
+    </div>
+
+    <!-- Content Sections -->
+    <div class="content-section" title="Posts">
+        <!-- Posts Content -->
+        <div id="posts-content" class="content active" title="Posts">
+            <div class="grid posts-grid">
+                {% if posts %}
+                {% for post in posts %}
+                <article class="tweet">
+                    <div class="tweet-content">
+                        <div class="avatar">{{ post.user.first_name|default:"U"|slice:":1" }}</div>
+                        <div class="tweet-body">
+                            <div class="tweet-header1">
+                                <div class="tweet-header">
+                                    <span class="username">{{ post.user.first_name }}</span>
+                                    <span class="handle">@{{ post.user.username }}</span>
+                                </div>
+                                <div class="tweet-time">
+                                    <span>{{ post.time_display }}</span>
+                                </div>
+                            </div>
+                            <div class="tweet-text">{{ post.text }}</div>
+                            {% if post.img %}
+                            <div class="tweet-img">
+                                <img src="{{ post.img.url }}" alt="">
+                            </div>
+                            {% endif %}
+                            <div class="tweet-actions">
+                                <button class="action-btn reply" title="Reply">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="size-5" style="width: 20px; height: 20px; ">
+                                        <path fill-rule="evenodd"
+                                            d="M2 10c0-3.967 3.69-7 8-7 4.31 0 8 3.033 8 7s-3.69 7-8 7a9.165 9.165 0 0 1-1.504-.123 5.976 5.976 0 0 1-3.935 1.107.75.75 0 0 1-.584-1.143 3.478 3.478 0 0 0 .522-1.756C2.979 13.825 2 12.025 2 10Z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                                <button class="action-btn like{% if post.id in liked_post_ids %} liked{% endif %}"
+                                    data-post-id="{{ post.id }}" data-action="like" title="Like">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="size-5" style="width: 20px; height: 20px;">
+                                        <path
+                                            d="m9.653 16.915-.005-.003-.019-.01a20.759 20.759 0 0 1-1.162-.682 22.045 22.045 0 0 1-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 0 1 8-2.828A4.5 4.5 0 0 1 18 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 0 1-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 0 1-.69.001l-.002-.001Z" />
+                                    </svg>
+                                </button>
+                                <button class="action-btn retweet" title="Retweet">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="size-5" style="width: 20px; height: 20px;">
+                                        <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                                        <path fill-rule="evenodd"
+                                            d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                                <button
+                                    class="action-btn bookmark{% if post.id in bookmarked_post_ids %} bookmarked{% endif %}"
+                                    data-post-id="{{ post.id }}" data-action="bookmark" title="Bookmark">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="size-5" style="width: 20px; height: 20px;">
+                                        <path fill-rule="evenodd"
+                                            d="M10 2c-1.716 0-3.408.106-5.07.31C3.806 2.45 3 3.414 3 4.517V17.25a.75.75 0 0 0 1.075.676L10 15.082l5.925 2.844A.75.75 0 0 0 17 17.25V4.517c0-1.103-.806-2.068-1.93-2.207A41.403 41.403 0 0 0 10 2Z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- Saved Content -->
+        <div id="saved-content" class="content">
+            {% if bookmarks %}
+            {% for bookmark in bookmarks %}
+            <article class="tweet">
+                <div class="tweet-content">
+                    <div class="avatar">{{ bookmark.post.user.first_name|default:"U"|slice:":1" }}</div>
+                    <div class="tweet-body">
+                        <div class="tweet-header1">
+                            <div class="tweet-header">
+                                <span class="username">{{ bookmark.post.user.first_name }}</span>
+                                <span class="handle">@{{ bookmark.post.user.username }}</span>
+                            </div>
+                            <div class="tweet-time">
+                                <span>{{ bookmark.post.time_display }}</span>
+                            </div>
+                        </div>
+                        <div class="tweet-text">{{ bookmark.post.text }}</div>
+                        {% if bookmark.post.img %}
+                        <div class="tweet-img">
+                            <img src="{{ bookmark.post.img.url }}" alt="">
+                        </div>
+                        {% endif %}
+                        <div class="tweet-actions">
+                            <button class="action-btn reply" title="Reply">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="size-5" style="width: 20px; height: 20px; ">
+                                    <path fill-rule="evenodd"
+                                        d="M2 10c0-3.967 3.69-7 8-7 4.31 0 8 3.033 8 7s-3.69 7-8 7a9.165 9.165 0 0 1-1.504-.123 5.976 5.976 0 0 1-3.935 1.107.75.75 0 0 1-.584-1.143 3.478 3.478 0 0 0 .522-1.756C2.979 13.825 2 12.025 2 10Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <button class="action-btn like{% if bookmark.post.id in liked_post_ids %} liked{% endif %}"
+                                data-post-id="{{ bookmark.post.id }}" data-action="like" title="Like">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="size-5" style="width: 20px; height: 20px;">
+                                    <path
+                                        d="m9.653 16.915-.005-.003-.019-.01a20.759 20.759 0 0 1-1.162-.682 22.045 22.045 0 0 1-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 0 1 8-2.828A4.5 4.5 0 0 1 18 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 0 1-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 0 1-.69.001l-.002-.001Z" />
+                                </svg>
+                            </button>
+                            <button class="action-btn retweet" title="Retweet">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="size-5" style="width: 20px; height: 20px;">
+                                    <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                                    <path fill-rule="evenodd"
+                                        d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <button
+                                class="action-btn bookmark{% if bookmark.post.id in bookmarked_post_ids %} bookmarked{% endif %}"
+                                data-post-id="{{ bookmark.post.id }}" data-action="bookmark" title="Bookmark">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="size-5" style="width: 20px; height: 20px;">
+                                    <path fill-rule="evenodd"
+                                        d="M10 2c-1.716 0-3.408.106-5.07.31C3.806 2.45 3 3.414 3 4.517V17.25a.75.75 0 0 0 1.075.676L10 15.082l5.925 2.844A.75.75 0 0 0 17 17.25V4.517c0-1.103-.806-2.068-1.93-2.207A41.403 41.403 0 0 0 10 2Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Likes Content -->
+        <div id="likes-content" class="content">
+            {% if likes %}
+            {% for like in likes %}
+            <article class="tweet">
+                <div class="tweet-content">
+                    <div class="avatar">{{ like.post.user.first_name|default:"U"|slice:":1" }}</div>
+                    <div class="tweet-body">
+                        <div class="tweet-header1">
+                            <div class="tweet-header">
+                                <span class="username">{{ like.post.user.first_name }}</span>
+                                <span class="handle">@{{ like.post.user.username }}</span>
+                            </div>
+                            <div class="tweet-time">
+                                <span>{{ like.post.time_display }}</span>
+                            </div>
+                        </div>
+                        <div class="tweet-text">{{ like.post.text }}</div>
+                        {% if like.post.img %}
+                        <div class="tweet-img">
+                            <img src="{{ like.post.img.url }}" alt="">
+                        </div>
+                        {% endif %}
+                        <div class="tweet-actions">
+                            <button class="action-btn reply" title="Reply">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="size-5" style="width: 20px; height: 20px; ">
+                                    <path fill-rule="evenodd"
+                                        d="M2 10c0-3.967 3.69-7 8-7 4.31 0 8 3.033 8 7s-3.69 7-8 7a9.165 9.165 0 0 1-1.504-.123 5.976 5.976 0 0 1-3.935 1.107.75.75 0 0 1-.584-1.143 3.478 3.478 0 0 0 .522-1.756C2.979 13.825 2 12.025 2 10Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <button class="action-btn like{% if like.post.id in liked_post_ids %} liked{% endif %}"
+                                data-post-id="{{ like.post.id }}" data-action="like" title="Like">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="size-5" style="width: 20px; height: 20px;">
+                                    <path
+                                        d="m9.653 16.915-.005-.003-.019-.01a20.759 20.759 0 0 1-1.162-.682 22.045 22.045 0 0 1-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 0 1 8-2.828A4.5 4.5 0 0 1 18 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 0 1-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 0 1-.69.001l-.002-.001Z" />
+                                </svg>
+                            </button>
+                            <button class="action-btn retweet" title="Retweet">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="size-5" style="width: 20px; height: 20px;">
+                                    <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                                    <path fill-rule="evenodd"
+                                        d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <button
+                                class="action-btn bookmark{% if like.post.id in bookmarked_post_ids %} bookmarked{% endif %}"
+                                data-post-id="{{ like.post.id }}" data-action="bookmark" title="Bookmark">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="size-5" style="width: 20px; height: 20px;">
+                                    <path fill-rule="evenodd"
+                                        d="M10 2c-1.716 0-3.408.106-5.07.31C3.806 2.45 3 3.414 3 4.517V17.25a.75.75 0 0 0 1.075.676L10 15.082l5.925 2.844A.75.75 0 0 0 17 17.25V4.517c0-1.103-.806-2.068-1.93-2.207A41.403 41.403 0 0 0 10 2Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/profile.js' %}"></script>
+
+{% endblock %}

@@ -74,6 +74,11 @@ body {
     position: relative;
 }
 
+.mobile-profile-a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .mobile-logo {
     font-size: 24px;
     font-weight: bold;
@@ -172,7 +177,6 @@ body {
     padding: 20px;
     border-right: 1px solid #2f3336;
     position: fixed;
-
     /* position: sticky; */
     height: 100vh;
     overflow-y: auto;
@@ -243,7 +247,7 @@ body {
 .main-content {
     max-width: 600px;
     flex: 1;
-    border-right: 1px solid #2f3336;
+    /* border-right: 1px solid #2f3336; */
     margin-left: 275px;
 }
 
@@ -254,6 +258,8 @@ body {
     backdrop-filter: blur(12px);
     background: rgba(0, 0, 0, 0.8);
     position: sticky;
+    position: fixed;
+    width: 600px;
     top: 0;
     z-index: 10;
 }
@@ -265,6 +271,10 @@ body {
 
 .tabs {
     display: flex;
+    position: fixed;
+    width: 574px;
+    top: 60px;
+    background: rgba(0, 0, 0, 0.8);
     border-bottom: 1px solid #2f3336;
 }
 
@@ -308,6 +318,7 @@ body {
 .compose-content {
     display: flex;
     gap: 12px;
+    margin-top: 60px;
 }
 
 .avatar {
@@ -444,6 +455,10 @@ body {
     margin-bottom: 4px;
 }
 
+.tweet-time {
+    margin-left: auto;
+}
+
 .username {
     font-weight: 700;
     color: #e7e9ea;
@@ -484,7 +499,7 @@ body {
 }
 
 .tweet-actions .action-btn {
-    color: #71767b;
+    color: white;
     background: none;
     border: none;
     cursor: pointer;
@@ -510,8 +525,9 @@ body {
 
 /* Like tugmasi */
 .tweet-actions .action-btn.like:hover {
-    background: rgba(249, 24, 128, 0.1);
-    color: rgba(249, 24, 129, 0.274);
+    background: rgba(249, 24, 129, 0.363);
+    /* color: rgba(249, 24, 129, 0.305); */
+    color: white;
 }
 
 .tweet-actions .action-btn.like.active {
@@ -526,8 +542,9 @@ body {
 
 /* Bookmark tugmasi */
 .tweet-actions .action-btn.bookmark:hover {
-    background: #1c2836;
-    color: #3d75b67c;
+    background: #1d9cf05b;
+    /* color: #3d75b67c; */
+    color: white;
 }
 
 .tweet-actions .action-btn.bookmark.active {
@@ -537,8 +554,11 @@ body {
 /* Right Sidebar */
 .right-sidebar {
     width: 350px;
+    border-left: 1px solid #2f3336;
     padding: 20px;
-    /* position: relative; */
+    position: fixed;
+    right: 136px;
+    height: 100vh;
 }
 
 .widget {
@@ -684,9 +704,19 @@ body {
     .mobile-post-btn2 {
         display: none;
     }
+
+    .widget {
+        display: none;
+    }
 }
 
 @media (max-width: 768px) {
+    .main-content {
+        width: 100%;
+        margin-left: 100px;
+        box-shadow: none;
+    }
+
     .sidebar {
         width: 80px;
     }
@@ -762,8 +792,10 @@ body {
 }
 
 @media (max-width: 640px) {
-    .container {
-        flex-direction: column;
+    .main-content {
+        width: 100%;
+        margin-left: 0;
+        box-shadow: none;
     }
 
     .compose {

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Post
+from .models import User, Post, Like, Bookmark
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -11,3 +11,13 @@ class UserAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     list_display = ('user', 'id')
     search_fields = ('user__username', 'id')
+
+@admin.register(Like)
+class LikeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'post', 'id')
+    search_fields = ('user__username', 'post__id')
+
+@admin.register(Bookmark)
+class BookmarkAdmin(admin.ModelAdmin):
+    list_display = ('user', 'post', 'id')
+    search_fields = ('user__username', 'post__id')

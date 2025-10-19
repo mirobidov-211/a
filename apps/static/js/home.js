@@ -137,23 +137,61 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll('.tweet-actions .action-btn').forEach(function (btn) {
-        const postId = btn.getAttribute('data-post-id');
-        const action = btn.getAttribute('data-action');
-        const key = `actionBtn_${postId}_${action}`;
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
-        if (localStorage.getItem(key) === '1') {
-            btn.classList.add('active');
-        }
+    const csrftoken = getCookie('csrftoken') || '';
 
+    // Like buttons
+    document.querySelectorAll('.tweet-actions .action-btn.like').forEach(function (btn) {
         btn.addEventListener('click', function () {
-            if (btn.classList.contains('active')) {
-                btn.classList.remove('active');
-                localStorage.setItem(key, '0');
-            } else {
-                btn.classList.add('active');
-                localStorage.setItem(key, '1');
-            }
+            const postId = btn.getAttribute('data-post-id');
+            fetch('/api/toggle-like/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken
+                },
+                body: `post_id=${encodeURIComponent(postId)}`
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.ok) return;
+                if (data.liked) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            })
+            .catch(() => {});
+        });
+    });
+
+    // Bookmark buttons
+    document.querySelectorAll('.tweet-actions .action-btn.bookmark').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const postId = btn.getAttribute('data-post-id');
+            fetch('/api/toggle-bookmark/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken
+                },
+                body: `post_id=${encodeURIComponent(postId)}`
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.ok) return;
+                if (data.bookmarked) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            })
+            .catch(() => {});
         });
     });
 });

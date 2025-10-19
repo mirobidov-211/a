@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from apps.views import home, register, verify_email_code, save_user, user_login, user_logout, tweet_create
+from apps.views import home, register, verify_email_code, save_user, user_login, user_logout, tweet_create, profile, toggle_like, toggle_bookmark
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,6 +13,9 @@ urlpatterns = [
     path('verify-code/', verify_email_code, name='verify'),
     path('save-user/', save_user, name='saveuser'),
     path('tweet/create/', tweet_create, name='tweet_create'),
+    path('profile/', profile, name='profile'),
+    path('api/toggle-like/', toggle_like, name='toggle_like'),
+    path('api/toggle-bookmark/', toggle_bookmark, name='toggle_bookmark'),
 ]
 
 if settings.DEBUG:

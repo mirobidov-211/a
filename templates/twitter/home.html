@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block main%}
+{% block main %}
 
 <!-- Main Content -->
+
 <main class="main-content">
     <div class="header">
         <h1>Bosh sahifa</h1>
     </div>
 
-    <div class="tabs">
+    <!-- <div class="tabs">
         <div class="tab active">Siz uchun</div>
         <div class="tab">Obuna bo'lganlar</div>
-    </div>
+    </div> -->
 
     <!-- Compose Tweet -->
     <form class="compose" method="post" action="{% url 'tweet_create' %}">
@@ -22,8 +23,8 @@
             <div class="compose-form">
                 <!-- Text input -->
                 <label for="composeText" style="display:none;">Post matni</label>
-                <textarea class="compose-textarea" id="composeText" name="content" placeholder="Nima bo'lyapti?"
-                    rows="3"></textarea>
+                <textarea class="compose-textarea" id="composeText" name="content"
+                    placeholder="@{{ user.username}}. Nima bo'lyapti?" rows="3"></textarea>
 
                 <div class="compose-actions">
                     <div class="compose-icons">
@@ -92,7 +93,6 @@
     </form>
 
 
-
     <!-- Timeline -->
     <div class="timeline" id="timeline">
         {% for i in post %}
@@ -104,7 +104,9 @@
                         <div class="tweet-header">
                             <span class="username">{{ i.user.first_name }}</span>
                             <span class="handle">@{{ i.user.username }}</span>
-                            <span class="timestamp">{{ i.timestamp }}</span>
+                        </div>
+                        <div class="tweet-time">
+                            <span class="timestamp">{{ i.time_display }}</span>
                         </div>
                     </div>
                     <div class="tweet-text">
@@ -124,7 +126,7 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </button>
-                        <button class="action-btn like" data-post-id="{{ i.id }}" data-action="like">
+                        <button class="action-btn like{% if i.id in liked_post_ids %} active{% endif %}" data-post-id="{{ i.id }}" data-action="like">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="size-5" style="width: 20px; height: 20px;">
                                 <path
@@ -140,7 +142,7 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </button>
-                        <button class="action-btn bookmark" data-post-id="{{ i.id }}" data-action="bookmark">
+                        <button class="action-btn bookmark{% if i.id in bookmarked_post_ids %} active{% endif %}" data-post-id="{{ i.id }}" data-action="bookmark">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="size-5" style="width: 20px; height: 20px;">
                                 <path fill-rule="evenodd"

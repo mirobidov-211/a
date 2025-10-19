@@ -1,0 +1,69 @@
+<div class="timeline active" id="timeline">
+    {% if posts %}
+    {% for post in posts %}
+    <article class="tweet">
+        <div class="tweet-content">
+            <div class="avatar">{{ post.user.first_name|default:"U"|slice:":1" }}</div>
+            <div class="tweet-body">
+                <div class="tweet-header1">
+                    <div class="tweet-header">
+                        <span class="username">{{ post.user.first_name }}</span>
+                        <span class="handle">@{{ post.user.username }}</span>
+                    </div>
+                    <div class="tweet-time">
+                        <span>{{ post.time_display }}</span>
+                    </div>
+                </div>
+                <div class="tweet-text">{{ post.text }}</div>
+                {% if post.img %}
+                <div class="tweet-img">
+                    <img src="{{ post.img.url }}" alt="">
+                </div>
+                {% endif %}
+                <div class="tweet-actions">
+                    <button class="action-btn reply" title="Reply">
+                        <!-- reply icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                            style="width:20px;height:20px">
+                            <path fill-rule="evenodd"
+                                d="M2 10c0-3.967 3.69-7 8-7 4.31 0 8 3.033 8 7s-3.69 7-8 7a9.165 9.165 0 0 1-1.504-.123 5.976 5.976 0 0 1-3.935 1.107.75.75 0 0 1-.584-1.143 3.478 3.478 0 0 0 .522-1.756C2.979 13.825 2 12.025 2 10Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <button class="action-btn like" data-post-id="{{ post.id }}" data-action="like" title="Like">
+                        <!-- like icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                            style="width:20px;height:20px">
+                            <path
+                                d="m9.653 16.915-.005-.003-.019-.01a20.759 20.759 0 0 1-1.162-.682 22.045 22.045 0 0 1-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 0 1 8-2.828A4.5 4.5 0 0 1 18 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 0 1-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 0 1-.69.001l-.002-.001Z" />
+                        </svg>
+                    </button>
+                    <button class="action-btn retweet" title="Retweet">
+                        <!-- retweet icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                            style="width:20px;height:20px">
+                            <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                        </svg>
+                    </button>
+                    <button class="action-btn bookmark" data-post-id="{{ post.id }}" data-action="bookmark"
+                        title="Bookmark">
+                        <!-- bookmark icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                            style="width:20px;height:20px">
+                            <path fill-rule="evenodd"
+                                d="M10 2c-1.716 0-3.408.106-5.07.31C3.806 2.45 3 3.414 3 4.517V17.25a.75.75 0 0 0 1.075.676L10 15.082l5.925 2.844A.75.75 0 0 0 17 17.25V4.517c0-1.103-.806-2.068-1.93-2.207A41.403 41.403 0 0 0 10 2Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </article>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <h3>No posts yet</h3>
+        <p>When {{ request.user.username }} posts, you'll see their posts here.</p>
+    </div>
+    {% endif %}
+</div>
