@@ -1,1 +1,1 @@
-web: gunicorn Twitter.wsgi:application
+web: gunicorn twitter.wsgi:application
