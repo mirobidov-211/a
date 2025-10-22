@@ -11,31 +11,28 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import os, dj_database_url
-import environ
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+import os
+import dj_database_url
+from decouple import config
+
 BASE_DIR = Path(__file__).resolve().parent.parent
-env = environ.Env()
-environ.Env.read_env()
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# DEBUG
+DEBUG = config('DEBUG', default='False', cast=bool)
 
-DEBUG = env.bool('DEBUG', default=False)
+# SECRET KEY
+SECRET_KEY = config('SECRET_KEY')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
+# ALLOWED HOSTS
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='a-u3w2.onrender.com,127.0.0.1,localhost').split(',')
 
 
 
 
 CSRF_TRUSTED_ORIGINS = [
     "https://7c382665d1e6.ngrok-free.app",
-    "https://a-u3w2.onrender.com"
+    "https://a-u3w2.onrender.com",
+    "http://a-u3w2.onrender.com",  # Bu qatorni qo'shing
 ]
 
 
@@ -93,10 +90,10 @@ import dj_database_url
 from decouple import config
 
 DATABASES = {
-    'default': dj_database_url.parse(
-        config('DATABASE_URL'),
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL'),
         conn_max_age=600,
-        ssl_require=True,  # 🔒 Bu joy juda muhim!
+        ssl_require=True,
     )
 }
 
@@ -136,8 +133,8 @@ USE_TZ = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='abdulazizmirobidov75@gmail.com')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
