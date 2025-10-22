@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 import dj_database_url
 from decouple import config
+import environ
+env = environ.Env()
+environ.Env.read_env() 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -91,9 +94,9 @@ from decouple import config
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=config('DATABASE_URL'),
+        default=config('DATABASE_URL', default='sqlite:///db.sqlite3'),
         conn_max_age=600,
-        ssl_require=True,
+        ssl_require=False,  # localda True emas, False bo‘lsin
     )
 }
 
