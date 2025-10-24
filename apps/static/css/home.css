@@ -175,7 +175,6 @@ body {
 .sidebar {
     width: 275px;
     padding: 20px;
-    border-right: 1px solid #2f3336;
     position: fixed;
     /* position: sticky; */
     height: 100vh;
@@ -554,11 +553,13 @@ body {
 /* Right Sidebar */
 .right-sidebar {
     width: 350px;
-    border-left: 1px solid #2f3336;
     padding: 20px;
     position: fixed;
+    border: 10px solid red;
+    border: 1px;
     right: 136px;
     height: 100vh;
+
 }
 
 .widget {
@@ -694,11 +695,17 @@ body {
     display: none;
 }
 
+    
+
+
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .right-sidebar {
         display: none;
     }
+    
+
 
     .post-btn1,
     .mobile-post-btn2 {
@@ -747,6 +754,10 @@ body {
     .compose-content {
         flex-direction: column;
         gap: 8px;
+    }
+
+    .timeline {
+        top: 100px;
     }
 
     .tweet-actions {
